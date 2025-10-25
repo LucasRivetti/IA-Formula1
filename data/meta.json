@@ -1,0 +1,19 @@
+{
+  "target": "laptime_delta_pct",
+  "gp_key": "gp_key",
+  "numeric": [
+    "tyre_life",
+    "lap_number",
+    "sector1_time",
+    "sector2_time",
+    "sector3_time",
+    "speed_i1",
+    "speed_i2",
+    "speed_fl",
+    "speed_st"
+  ],
+  "categorical": [
+    "compound",
+    "team"
+  ]
+}
