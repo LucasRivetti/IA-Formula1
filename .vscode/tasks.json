@@ -86,7 +86,7 @@
       "id": "stintage",
       "type": "promptString",
       "description": "Idade do pneu (stint fixo) — usado se o modo for 'stint fixo'",
-      "default": "8"
+      "default": "7"
     },
     {
       "id": "stinIni",
