@@ -1,6 +1,7 @@
 {
   "version": "2.0.0",
   "options": {
+    "cwd": "${workspaceFolder}",
     "env": {
       "PYTHONUNBUFFERED": "1",
       "MKL_NUM_THREADS": "1",
@@ -11,50 +12,125 @@
     {
       "label": "1) Features",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.features --input data\\f1_dados_filtrados.csv --output data\\processed.parquet --meta data\\meta.json",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.features",
+        "--input", "data/f1_dados_filtrados.csv",
+        "--output", "data/processed.parquet",
+        "--meta", "data/meta.json"
+      ],
       "group": "build",
       "problemMatcher": []
     },
     {
       "label": "2) Train – RF (FULL POWER, progresso)",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.train --data data\\processed.parquet --meta data\\meta.json --save models\\best_model.joblib --model rf --rf_verbose 1 --n_estimators 1200 --min_samples_leaf 1 --max_depth None --max_features sqrt --n_jobs -1",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.train",
+        "--data", "data/processed.parquet",
+        "--meta", "data/meta.json",
+        "--save", "models/best_model.joblib",
+        "--model", "rf",
+        "--rf_verbose", "1",
+        "--n_estimators", "1200",
+        "--min_samples_leaf", "1",
+        "--max_depth", "None",
+        "--max_features", "sqrt",
+        "--n_jobs", "-1"
+      ],
       "group": "build",
       "problemMatcher": []
     },
     {
       "label": "2a) Train – RF (FAST, ${input:limitFolds} folds)",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.train --data data\\processed.parquet --meta data\\meta.json --save models\\best_model.joblib --model rf --rf_verbose 0 --n_estimators 400 --min_samples_leaf 1 --max_depth None --max_features sqrt --n_jobs -1 --limit_folds ${input:limitFolds}",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.train",
+        "--data", "data/processed.parquet",
+        "--meta", "data/meta.json",
+        "--save", "models/best_model.joblib",
+        "--model", "rf",
+        "--rf_verbose", "0",
+        "--n_estimators", "400",
+        "--min_samples_leaf", "1",
+        "--max_depth", "None",
+        "--max_features", "sqrt",
+        "--n_jobs", "-1",
+        "--limit_folds", "${input:limitFolds}"
+      ],
       "group": "build",
       "problemMatcher": []
     },
     {
       "label": "2b) Train – HGB (rápido, progresso)",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.train --data data\\processed.parquet --meta data\\meta.json --save models\\best_model.joblib --model hgb --hgb_iter 800 --hgb_lr 0.06 --hgb_max_depth None",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.train",
+        "--data", "data/processed.parquet",
+        "--meta", "data/meta.json",
+        "--save", "models/best_model.joblib",
+        "--model", "hgb",
+        "--hgb_iter", "800",
+        "--hgb_lr", "0.06",
+        "--hgb_max_depth", "None"
+      ],
       "group": "build",
       "problemMatcher": []
     },
     {
       "label": "3) Evaluate por GP",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.evaluate --model models\\best_model.joblib --data data\\processed.parquet --groupby gp_key",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.evaluate",
+        "--model", "models/best_model.joblib",
+        "--data", "data/processed.parquet",
+        "--groupby", "gp_key"
+      ],
       "group": "build",
       "problemMatcher": []
     },
 
     {
-      "label": "4) Scenario – Escolher (fixo ou grid)",
+      "label": "4a) Scenario – Stint Fixo",
       "type": "shell",
-      "command": "if ('${input:scenarioMode}' -eq 'grid') { ${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.scenario_track --gp '${input:gp}' --stintage_grid ${input:stinIni} ${input:stinFim} ${input:stinPasso} --compounds '${input:compounds}' --top ${input:topN} } else { ${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.scenario_track --gp '${input:gp}' --stintage ${input:stintage} --compounds '${input:compounds}' --top ${input:topN} }",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.scenario_track",
+        "--gp", "${input:gp}",
+        "--stintage", "${input:stintage}",
+        "--compounds", "${input:compounds}",
+        "--top", "${input:topN}"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "4b) Scenario – Grid de stintage (busca)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.scenario_track",
+        "--gp", "${input:gp}",
+        "--stintage_grid",
+        "${input:stinIni}", "${input:stinFim}", "${input:stinPasso}",
+        "--compounds", "${input:compounds}",
+        "--top", "${input:topN}"
+      ],
       "group": "build",
       "problemMatcher": []
     },
     {
       "label": "4c) Scenario – Listar GPs",
       "type": "shell",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe -u -m src.scenario_track --list_gps",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u", "-m", "src.scenario_track",
+        "--list_gps"
+      ],
       "group": "build",
       "problemMatcher": []
     }
@@ -67,16 +143,6 @@
       "default": "6"
     },
     {
-      "id": "scenarioMode",
-      "type": "pickString",
-      "description": "Qual cenário deseja rodar?",
-      "options": [
-        { "label": "stint fixo", "value": "fixed" },
-        { "label": "grid de stintage (busca)", "value": "grid" }
-      ],
-      "default": "grid"
-    },
-    {
       "id": "gp",
       "type": "promptString",
       "description": "Pista (substring do gp_key; ex.: Monza, Interlagos, Spa)",
@@ -85,7 +151,7 @@
     {
       "id": "stintage",
       "type": "promptString",
-      "description": "Idade do pneu (stint fixo) — usado se o modo for 'stint fixo'",
+      "description": "Idade do pneu (stint fixo)",
       "default": "7"
     },
     {
