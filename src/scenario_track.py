@@ -155,9 +155,11 @@ def main():
     }).sort_values("gap_%_melhor_volta")
 
     if args.stintage_grid and len(comp_iter) > 1:
-        best_by_comp = out.groupby("compound", dropna=False).apply(
-            lambda d: d.nsmallest(1, "gap_%_melhor_volta")
-        ).reset_index(drop=True)
+        best_by_comp = (
+            out.groupby("compound", dropna=False, group_keys=False, observed=True)
+                .apply(lambda d: d.nsmallest(1, "gap_%_melhor_volta"), include_groups=False)
+                .reset_index(drop=True)
+        )
         print("\n=== Melhor por composto (grid de stint) ===")
         print(best_by_comp.to_string(index=False, float_format=lambda x: f"{x:,.2f}"))
         print("\nTop geral:")
