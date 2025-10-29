@@ -193,7 +193,19 @@
       "problemMatcher": []
     },
     {
-      "label": "5) Montar os Graficos",
+      "label": "5) Run all tasks",
+      "type": "shell",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-u",
+        "-m",
+        "src.run_scenarios"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "6) Montar os Graficos",
       "type": "shell",
       "command": "${command:python.interpreterPath}",
       "args": [
