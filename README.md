@@ -12,14 +12,6 @@ Este repositório implementa um pipeline simples e reproduzível de *machine lea
 - **Python** 3.9+ (recomendado 3.10/3.11)
 - Pacotes: `pandas`, `numpy`, `scikit-learn`, `pyarrow`, `joblib`, `tqdm`, `threadpoolctl`
 
-### Setup rápido (Windows/PowerShell)
-```powershell
-python -m venv .venv
-. .\.venv\Scripts\Activate.ps1
-pip install -U pip
-pip install pandas numpy scikit-learn pyarrow joblib tqdm threadpoolctl
-```
-
 ---
 
 ## 📁 Estrutura
@@ -43,47 +35,58 @@ IA-Formula1/
 │  ├─ scenario.py                # cenário simples por composto
 │  └─ scenario_track.py          # cenário por pista (grid de stint, compostos)
 └─ .vscode/
-   └─ tasks.json                 # tarefas VS Code (opcional)
+   ├─ tasks.json
+   └─ settings.json              # tarefas VS Code (opcional)
 ```
 
 ---
 
-## 🧭 Fluxo de uso (CLI)
+## ▶️ Como rodar (Windows e Linux/macOS)
 
-1) **Coloque** o CSV em `data/f1_dados_filtrados.csv`  
-2) **Gere features** e o alvo (`processed.parquet` + `meta.json`):
-   ```powershell
-   python -u -m src.features --input data\f1_dados_filtrados.csv --output data\processed.parquet --meta data\meta.json
-   ```
-3) **Treine** (RandomForest full-power ou HGB rápido):  
-   ```powershell
-   # RF (full)
-   python -u -m src.train --data data\processed.parquet --meta data\meta.json --save models\best_model.joblib `
-     --model rf --rf_verbose 1 --n_estimators 1200 --min_samples_leaf 1 --max_features sqrt --n_jobs -1
-   # HGB (rápido)
-   python -u -m src.train --data data\processed.parquet --meta data\meta.json --save models\best_model.joblib `
-     --model hgb --hgb_iter 800 --hgb_lr 0.06 --hgb_max_depth None
-   ```
-   - Validação: **LOGPO** (*Leave-One-GrandPrix-Out*).  
-   - Métricas: **MAE** e **RMSE** por *fold* e médias.
-4) **Avalie por GP**:
-   ```powershell
-   python -u -m src.evaluate --model models\best_model.joblib --data data\processed.parquet --groupby gp_key
-   ```
-5) **Cenários**:
-   - **Simples** (troca de composto/stint usando medianas globais):
-     ```powershell
-     python -u -m src.scenario --stintage 8 --compounds SOFT,MEDIUM,HARD
-     ```
-   - **Por pista** (otimiza stint; aceita apelidos como *Monza, Interlagos, Spa*):
-     ```powershell
-     # listar GPs disponíveis
-     python -u -m src.scenario_track --list_gps
-     # grid de stint na pista escolhida
-     python -u -m src.scenario_track --gp "Italian Grand Prix" --stintage_grid 4 18 1 --compounds SOFT,MEDIUM,HARD --top 10
-     # saída ordenada por: gap_%_melhor_volta (menor = melhor)
-     ```
+### 1) Criar ambiente e instalar deps
+**Windows (PowerShell)**
+```powershell
+python -m venv .venv
+. .\.venv\Scripts\Activate.ps1
+pip install -U pip
+pip install pandas numpy scikit-learn pyarrow joblib tqdm threadpoolctl
+pip install -r requirements.txt
+```
+**Linux/macOS (bash)**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -U pip
+pip install pandas numpy scikit-learn pyarrow joblib tqdm threadpoolctl
+pip install -r requirements.txt
+```
 
+> No VS Code: selecione o interpretador do `.venv` (Status Bar → Python).
+
+### 2) Coloque o CSV
+Salve seu arquivo como `data/f1_dados_filtrados.csv`.
+
+### 3) Use as **Tasks** do VS Code
+Abra o **Command Palette** → `Tasks: Run Task` (ou `Ctrl/Cmd+Shift+B`) e rode na ordem:
+
+1. **1) Features** → gera `data/processed.parquet` + `data/meta.json`
+2. **2) Train – RF (FULL POWER, progresso)** *ou* **2a) Train – RF (FAST, N folds)** *ou* **2b) Train – HGB (rápido)** → gera `models/best_model.joblib`
+3. **3) Evaluate por GP** → relatório por `gp_key` (usa o modelo salvo)
+4. **4a) Scenario – Stint Fixo** *ou* **4b) Scenario – Grid de stintage (busca)** → ranking de combinações por pista  
+   (Use **4c) Scenario – Listar GPs** para ver as chaves de GP disponíveis)
+
+## 4) Rodar por CLI (opcional)
+Com o `.venv` ativado, você pode rodar direto:
+```bash
+python -u -m src.features --input data/f1_dados_filtrados.csv --output data/processed.parquet --meta data/meta.json
+
+python -u -m src.train --data data/processed.parquet --meta data/meta.json --save models/best_model.joblib   --model rf --rf_verbose 1 --n_estimators 1200 --min_samples_leaf 1 --max_depth None --max_features sqrt --n_jobs -1
+
+python -u -m src.evaluate --model models/best_model.joblib --data data/processed.parquet --groupby gp_key
+
+python -u -m src.scenario_track --list_gps
+python -u -m src.scenario_track --gp "Monza" --stintage_grid 4 18 1 --compounds SOFT,MEDIUM,HARD --top 10
+```
 ---
 
 ## 🧪 Metodologia de validação (LOGPO)
