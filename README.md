@@ -88,7 +88,7 @@ IA-Formula1/
 
 ## 🧪 Metodologia de validação (LOGPO)
 
-- Para cada **GP** (pista/ano), um *fold* é criado: treina em todos os outros GPs e **testa** nesse GP.  
+- Para cada **GP** (pista/ano), um *fold* é criado: traina em todos os outros GPs e **testa** nesse GP.  
 - Essa abordagem estima a **generalização para pistas não vistas**.  
 - Relatamos **MAE** e **RMSE** em `laptime_delta_pct` (proporção).
 
