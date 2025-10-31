@@ -10,7 +10,7 @@ Este repositório implementa um pipeline simples e reproduzível de *machine lea
 ## 🔧 Ambiente
 
 - **Python** 3.9+ (recomendado 3.10/3.11)
-- Pacotes: `pandas`, `numpy`, `scikit-learn`, `pyarrow`, `joblib`, `tqdm`, `threadpoolctl`
+- Pacotes: `pandas`, `numpy`, `scikit-learn`, `pyarrow`, `joblib`, `tqdm`, `threadpoolctl`, `matplotlib`, `seaborn`
 
 ---
 
@@ -74,7 +74,8 @@ Abra o **Command Palette** → `Tasks: Run Task` (ou `Ctrl/Cmd+Shift+B`) e rode 
 3. **3) Evaluate por GP** → relatório por `gp_key` (usa o modelo salvo)
 4. **4a) Scenario – Stint Fixo** *ou* **4b) Scenario – Grid de stintage (busca)** → ranking de combinações por pista  
    (Use **4c) Scenario – Listar GPs** para ver as chaves de GP disponíveis)
-
+5. **5) Run Scenarios**
+6. **6) Montar graficos**
 ## 4) Rodar por CLI (opcional)
 Com o `.venv` ativado, você pode rodar direto:
 ```bash
@@ -86,6 +87,10 @@ python -u -m src.evaluate --model models/best_model.joblib --data data/processed
 
 python -u -m src.scenario_track --list_gps
 python -u -m src.scenario_track --gp "Monza" --stintage_grid 4 18 1 --compounds SOFT,MEDIUM,HARD --top 10
+
+python -u -m src.run_scenarios
+
+python -u -m  src.graphics
 ```
 ---
 
