@@ -199,7 +199,11 @@
       "args": [
         "-u",
         "-m",
-        "src.run_scenarios"
+        "src.run_scenarios",
+        "--gp",
+        "${input:gp}",
+        "--top",
+        "${input:topN}"
       ],
       "group": "build",
       "problemMatcher": []
