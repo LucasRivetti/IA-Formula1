@@ -18,25 +18,37 @@ Este repositório implementa um pipeline simples e reproduzível de *machine lea
 ```
 IA-Formula1/
 ├─ data/
-│  ├─ f1_dados_filtrados.csv     # CSV original
-│  ├─ processed.parquet          # (gerado) dados prontos p/ treino
-│  └─ meta.json                  # (gerado) features, alvo e chave de grupo
+│  ├─ f1_dados_filtrados.csv          # CSV original
+│  ├─ processed.parquet               # (gerado) dados prontos p/ treino
+│  └─ meta.json                       # (gerado) features, alvo e chave de grupo
 ├─ models/
-│  └─ best_model.joblib          # (gerado) pipeline sklearn treinado
+│  └─ best_model.joblib               
 ├─ reports/
-│  └─ feature_importance_rf.csv  # (gerado) importâncias da RandomForest
+│  └─ feature_importance_rf.csv       # (gerado) importâncias da RandomForest
+├─ results/
+│  ├─ grafico_dispersao_gap.png       
+│  ├─ grafico_gap_medio_por_composto.png
+│  ├─ grafico_gap_por_stintage.png
+│  ├─ heatmap_gap_por_faixa.png
+│  └─ res_data.csv                    # (gerado) coleta de cenários em lote
 ├─ src/
 │  ├─ __init__.py
-│  ├─ utils.py
-│  ├─ features.py                # engenharia de atributos
-│  ├─ splits.py                  # validação LOGPO (leave-one-GP-out)
-│  ├─ train.py                   # treino LR/RF/HGB (com barra de progresso)
-│  ├─ evaluate.py                # avaliação por GP
-│  ├─ scenario.py                # cenário simples por composto
-│  └─ scenario_track.py          # cenário por pista (grid de stint, compostos)
-└─ .vscode/
-   ├─ tasks.json
-   └─ settings.json              # tarefas VS Code (opcional)
+│  ├─ features.py                     # engenharia de atributos
+│  ├─ splits.py                       # validação LOGPO (leave-one-GP-out)
+│  ├─ train.py                        # treino RF/HGB
+│  ├─ evaluate.py                     # avaliação agregada por GP
+│  ├─ scenario.py                     # cenário simples por composto
+│  ├─ scenario_track.py               # cenário por pista (grid de stint, Top-N)
+│  ├─ graphics.py                     # utilitários de gráficos/plots
+│  └─ utils.py                        # helpers comuns (I/O, seed, etc.)
+├─ .vscode/
+│  ├─ tasks.json                      # tarefas VS Code (Windows/Linux)
+│  └─ settings.json                   # interpreter/qualidade de vida
+├─ run.sh                             # script de cenários em lote (Linux/macOS)
+├─ requirements.txt                   # dependências do projeto
+├─ .gitignore                         # ignora dados/artefatos pesados (ex.: models/*.joblib)
+└─ README.md
+
 ```
 
 ---
