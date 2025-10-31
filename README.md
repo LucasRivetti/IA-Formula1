@@ -74,8 +74,8 @@ Abra o **Command Palette** → `Tasks: Run Task` (ou `Ctrl/Cmd+Shift+B`) e rode 
 3. **3) Evaluate por GP** → relatório por `gp_key` (usa o modelo salvo)
 4. **4a) Scenario – Stint Fixo** *ou* **4b) Scenario – Grid de stintage (busca)** → ranking de combinações por pista  
    (Use **4c) Scenario – Listar GPs** para ver as chaves de GP disponíveis)
-5. **5) Run Scenarios**
-6. **6) Montar graficos**
+5. **5) Run Scenarios** → Executa os cenários selecionados (fixo ou grid), produzindo resultados consolidados por corrida e combinação de estratégias.
+6. **6) Montar graficos** → Gera visualizações dos resultados, incluindo comparações entre as variaveis do resultado de cada cenário, facilitando a análise.
 ## 4) Rodar por CLI (opcional)
 Com o `.venv` ativado, você pode rodar direto:
 ```bash
